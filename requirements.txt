@@ -1,0 +1,8 @@
+Flask==3.0.3
+requests==2.32.3
+streamlit==1.38.0
+python-dotenv==1.0.1
+pandas==2.2.2
+instaloader==4.13.1
+scipy==1.14.1
+transformers==4.44.2

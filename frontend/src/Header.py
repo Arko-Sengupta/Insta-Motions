@@ -30,6 +30,11 @@ def Header(title: str) -> None:
                 font-size: 2rem;
                 margin: 0;
             }}
+            @media (max-width: 420px) {{
+                h1 {{
+                   font-size: 1rem;
+                }}
+            }}
         </style>
         <h1>
             <i class="fab fa-instagram instagram-icon"></i>
