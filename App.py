@@ -1,14 +1,14 @@
 import os
+import json
 import time
 import logging
 import requests
+import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 
-from frontend.src.Input import Input
 from frontend.src.Header import Header
 from frontend.src.SubHeader import SubHeader
-from frontend.src.LoginHeader import LoginHeader
 from frontend.charts.BarChart import BarChart
 from frontend.charts.GroupedBarChart import GroupedBarChart
 from frontend.charts.PieChart import PieChart
@@ -23,9 +23,8 @@ class InstaMotionUI:
         """
         self.Title = os.getenv("TITLE")
         self.SERVER_URL = os.getenv("SENTIMENT_ANAYSIS_API")
-        self.Username = ""
-        self.Password = ""
         self.AnalyzeButton = False
+        self.df = None
 
     def Custom_CSS(self) -> None:
         """Custom CSS Styles"""
@@ -34,20 +33,13 @@ class InstaMotionUI:
                 .stMarkdown, .stForm {
                     min-width: 300px;
                 }
-                .login-container {
+                .upload-container {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
                     margin-top: -20%;
                     margin-bottom: 20%;
-                }
-                .login-form {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 10px;
-                    width: 100%;
                 }
                 .container-with-margin {
                     margin-bottom: 10%;
@@ -58,24 +50,30 @@ class InstaMotionUI:
             </style>
         """, unsafe_allow_html=True)
 
-    def LoginForm(self) -> None:
-        """Creates the Login form for Instagram Credentials."""
+    def Upload_XLSX_File(self) -> None:
+        """Component to Upload Excel File and Send its Content in a POST Request."""
         try:
             self.Custom_CSS()
+            st.markdown('<div class="upload-container">', unsafe_allow_html=True)
+            
+            uploaded_file = st.file_uploader("Choose an Excel File", type="xlsx")
+            
+            if uploaded_file is not None:
+                try:
+                    self.df = pd.read_excel(uploaded_file, engine='openpyxl')
+                    
+                    success = st.success("File Successfully Uploaded!")
+                    time.sleep(2)
+                    success.empty()
+                    
+                    st.dataframe(self.df)
+                    self.AnalyzeButton = st.button("Analyze Data")
+                except Exception as e:
+                    st.error(f"Error: {e}")
+            st.markdown('</div>', unsafe_allow_html=True)
 
-            with st.container():
-                st.markdown('<div class="login-container">', unsafe_allow_html=True)
-
-                with st.form(key='login_form'):
-                    LoginHeader()
-
-                    self.Username = Input(label="Username", placeholder="Enter Instagram Username", input_type="default", key='username')
-                    self.Password = Input(label="Password", placeholder="Enter Instagram Password", input_type="password", key='password')
-
-                    self.AnalyzeButton = st.form_submit_button(label='Analyze')
-                st.markdown('</div>', unsafe_allow_html=True)
         except Exception as e:
-            logging.error("An Error Occurred in LoginForm", exc_info=e)
+            logging.error("An Error Occurred in Upload_XLSX_File", exc_info=e)
             raise e
 
     def AnalysisCharts(self, post: dict) -> None:
@@ -108,35 +106,43 @@ class InstaMotionUI:
             raise e
 
     def InstaMotionUI(self) -> None:
-        """Main function to run the Instagram sentiment analysis UI."""
+        """Main Function to Run the Instagram Sentiment Analysis UI."""
         try:
             Header(self.Title)
             SubHeader()
-            self.LoginForm()
+            self.Upload_XLSX_File()
 
-            if self.AnalyzeButton:
-                if self.Username and self.Password:
-                    with st.spinner("Processing..."):
-                        response = requests.post(self.SERVER_URL, json={"username": self.Username, "password": self.Password}).json()
-                        posts, bool = response["response"][0], response["response"][1]
+            if self.AnalyzeButton and self.df is not None:
+                with st.spinner("Processing..."):
+                    try:
+                        data = self.df.to_dict(orient='records')
+                        response = requests.post(self.SERVER_URL, json={"data": data})
                         
-                        if bool: 
-                           posts_info = posts
-                           Header(f"Hey {self.Username}")
-   
-                           for post in posts_info:
-                               self.AnalysisCharts(post)
-   
-                           success = st.success("Sentiment Analysis Completed Successfully.")
-                           time.sleep(2); success.empty();
-                        else:
-                           error = st.error("Invalid Credentials Request Blocked by Instagram")
-                           time.sleep(2); error.empty();
-                else:
-                    error = st.error("Please Enter both Username and Password.")
-                    time.sleep(2); error.empty();
+                        if response.status_code == 200:
+                            response = response.json()
+                            posts_info = json.loads(response["response"])
+                            
+                            Header("Data Analysis")
 
-            st.markdown('<div class="alert">Remember to keep your Instagram Credentials Safe and use this Tool Responsibly.</div>', unsafe_allow_html=True)
+                            for post in posts_info:
+                                self.AnalysisCharts(post)
+
+                            success = st.success("Sentiment Analysis Completed Successfully.")
+                            time.sleep(2)
+                            success.empty()
+                        else:
+                            error = st.error("Error in Data Analysis.")
+                            time.sleep(2)
+                            error.empty()
+
+                    except Exception as e:
+                        error = st.error("Failed to Send Data to the Server.")
+                        time.sleep(2)
+                        error.empty()
+                        
+                        logging.error("Error Sending Data to Server", exc_info=e)
+
+            st.markdown('<div class="alert">Upload Data for Analysis and View the Results Here.</div>', unsafe_allow_html=True)
         except Exception as e:
             logging.error("An Error Occurred in InstaMotionUI", exc_info=e)
             raise e

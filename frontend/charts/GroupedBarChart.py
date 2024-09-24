@@ -59,7 +59,7 @@ def GroupedBarChart(comments_label: dict) -> None:
 
                 const data = {data};
 
-                const subgroups = ['Positive', 'Neutral', 'Negative'];
+                const subgroups = ['Negative', 'Neutral', 'Positive'];
                 const groups = data.map((d, i) => i + 1);
 
                 const x = d3.scaleBand()

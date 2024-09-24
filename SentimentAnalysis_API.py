@@ -2,6 +2,7 @@ import os
 import sys
 import logging
 import pandas as pd
+from typing import Tuple
 from flask import Blueprint, Flask, jsonify, request
 from backend.SentimentAnalyzer import AnalyzeData
 
@@ -19,10 +20,10 @@ class SentimentAnalyze:
         """Initializes the SentimentAnalyze Class."""
         self.analyzer = AnalyzeData()
 
-    def run(self, username: str, password: str) -> str:
-        """Runs Sentiment Analysis on the provided Credentials."""
+    def run(self, data: dict) -> Tuple[pd.DataFrame, bool]:
+        """Runs Sentiment Analysis on the provided Data."""
         try:
-            return self.analyzer.run(username, password)
+            return self.analyzer.run(data)
         except Exception as e:
             logging.error('An Error Occurred during Analysis', exc_info=e)
             raise
@@ -38,14 +39,12 @@ class SentimentAnalyzeAPI:
         self.sentimentanalyze = SentimentAnalyze()
 
     def Sentiment_Analyze(self) -> tuple:
-        """Handles the /posts URL, processes the Input Credentials, and returns the response."""
+        """Handles the /posts URL, processes the Data, and returns the response."""
         try:
-            credentials = request.get_json()
-            username = credentials.get("username")
-            password = credentials.get("password")
+            data = request.get_json()['data']
             
-            response = list(self.sentimentanalyze.run(username, password))
-            response[0] = response[0].to_dict(orient='records')
+            response, bool = self.sentimentanalyze.run(data)
+            response = response.to_json(orient='records')
             
             return jsonify({'response': response}), 200
         except Exception as e:

@@ -52,18 +52,18 @@ def PieChart(data: list) -> None:
             </div>
             <div class="legend">
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: #3897F0;"></div> Positive: {str(data[0]*100) + "%"}
+                    <div class="legend-color" style="background-color: #B3D9FE;"></div> Negative: {str((round(data[0], 2))*100) + "%"}
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: #88C4FE;"></div> Neutral: {str(data[1]*100) + "%"}
+                    <div class="legend-color" style="background-color: #88C4FE;"></div> Neutral: {str((round(data[1], 2))*100) + "%"}
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: #B3D9FE;"></div> Negative: {str(data[2]*100) + "%"}
+                    <div class="legend-color" style="background-color: #3897F0;"></div> Positive: {str((round(data[2], 2))*100) + "%"}
                 </div>
             </div>
             <script>
                 const width = 200, height = 200, radius = Math.min(width, height) / 2;
-                const colors = d3.scaleOrdinal(['#3897F0', '#88C4FE', '#B3D9FE']);
+                const colors = d3.scaleOrdinal(['#B3D9FE', '#88C4FE', '#3897F0']);
         
                 const svg = d3.select("#pie-chart")
                     .attr("width", width)
