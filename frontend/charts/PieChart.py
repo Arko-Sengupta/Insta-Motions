@@ -3,7 +3,7 @@ import streamlit as st
 
 def PieChart(data: list) -> None:
     """
-    Pie Chart using D3.js within a Streamlit Application.
+    Pie Chart using D3.js within a Streamlit App.
     """
     try:
         # HTML, CSS and JavaScript

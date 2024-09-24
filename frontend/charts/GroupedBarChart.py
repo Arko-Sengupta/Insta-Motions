@@ -3,7 +3,7 @@ import streamlit as st
 
 def GroupedBarChart(comments_label: dict) -> None:
     """
-    Responsive Grouped Bar Chart using D3.js within a Streamlit Application.
+    Responsive Grouped Bar Chart using D3.js within a Streamlit App.
     """
     try:
         # Extract Comments and Label Proportions

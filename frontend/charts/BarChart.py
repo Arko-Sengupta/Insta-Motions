@@ -3,7 +3,7 @@ import streamlit as st
 
 def BarChart(data: list) -> None:
     """
-    Bar Chart using D3.js within a Streamlit Application.
+    Bar Chart using D3.js within a Streamlit App.
     """
     try:
         # HTML, CSS, and JavaScript

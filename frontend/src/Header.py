@@ -3,7 +3,7 @@ import streamlit as st
 
 def Header(title: str) -> None:
     """
-    Renders Header with an Instagram Icon and the provided Title in a Streamlit App.
+    Renders Header with an Instagram Icon and the provided Title in Streamlit App.
     """
     try:
         # Title with Font Awesome Instagram Icon

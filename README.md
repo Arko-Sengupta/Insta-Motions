@@ -45,7 +45,7 @@ Before diving into the project, ensure you have the following prerequisites:
    streamlit run App.py
    ```
 
-6. Refer to the below format
+6. Refer to the below format for `Posts Excel Sheet`
    ```bash
    posts = [
     {

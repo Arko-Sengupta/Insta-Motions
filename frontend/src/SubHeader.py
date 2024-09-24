@@ -3,7 +3,7 @@ import streamlit as st
 
 def SubHeader() -> None:
     """
-    Renders a Sub-Header with an Informational Message in a Streamlit App.
+    Renders a Sub-Header with an Informational Message in Streamlit App.
     """
     try:
         # Sub-Title with Informational Message
