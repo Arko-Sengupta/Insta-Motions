@@ -80,7 +80,7 @@ class InstaMotionUI:
         """Displays Charts based on the Analysis of the Instagram Post."""
         try:
             with st.container():
-                st.markdown(f"""<h4>Post Link: <a href="{post["Post_URL"]}">{post["Post_URL"]}</a></h4>""", unsafe_allow_html=True)
+                st.markdown(f"""<h4>Post Link: <a href="{post["Post_URL"]}">{"Click Here"}</a></h4>""", unsafe_allow_html=True)
 
             with st.container():
                 col1, col2 = st.columns(2)
