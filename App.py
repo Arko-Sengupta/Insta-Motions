@@ -115,6 +115,13 @@ class InstaMotionUI:
             if self.AnalyzeButton and self.df is not None:
                 with st.spinner("Processing..."):
                     try:
+                        self.df['Post_ID'] = self.df['Post_ID'].astype(str)
+                        self.df['Post_Text'] = self.df['Post_Text'].astype(str)
+                        self.df['Post_Date'] = self.df['Post_Date'].astype(str)
+                        self.df['Likes_Count'] = self.df['Likes_Count'].astype(int)
+                        self.df['Comments_Count'] = self.df['Comments_Count'].astype(int)
+                        
+                        
                         data = self.df.to_dict(orient='records')
                         response = requests.post(self.SERVER_URL, json={"data": data})
                         
