@@ -13,7 +13,7 @@ Welcome to _**Insta-Motion**_! _**Insta-Motion**_ is a _**Sentiment Analyzer**_ 
 ## Introduction
 Your go-to tool for understanding the emotions behind Instagram posts. With just a few clicks, you can explore the sentiment of various posts, uncover trends, and gain insights into how people feel about different topics.
 
-## Application UI
+## Application U
 ![Screenshot 2024-10-14 125453](https://github.com/user-attachments/assets/de0721a3-71c6-44a0-8968-2ee0aa4e0c98)
 ![Screenshot 2024-10-14 125529](https://github.com/user-attachments/assets/5eb31869-1f4f-4069-a700-92511da5b8ff)
 
